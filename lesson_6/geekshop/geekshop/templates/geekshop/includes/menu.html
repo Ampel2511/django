@@ -1,0 +1,37 @@
+{% load static %}
+<div class="header clearfix">
+    <a href="/" class="logo"></a>
+    <ul class="menu">
+        {% for link in links_page %}
+        <li>
+            <a href="{% url link.href %}"
+               class="{% if request.resolver_match.link.href == link.href %}
+                active
+              {% endif %}">
+                {{ link.name }}
+            </a>
+        </li>
+        {% endfor %}
+        {% if user.is_authenticated %}
+        <li>
+            <a href="{% url 'auth:edit' %}">
+                {{ user.first_name|default:'Пользователь' }}
+            </a>
+        </li>
+        {% endif %}
+        <li>
+            {% if user.is_authenticated %}
+            <a href="{% url 'auth:logout' %}">выйти</a>
+            {% else %}
+            <a href="{% url 'auth:login' %}">войти</a>
+            {% endif %}
+        </li>
+    </ul>
+    <a href="#" class="search"></a>
+    <a href="{% url 'basket:view' %}" class="basket"><img src="{% static 'geekshop/img/cart.png' %}" alt="">
+    <span>
+        {{ basket.0.total_cost|floatformat:0 }} руб.
+        {{ basket.0.total_quantity }} шт.
+    </span>
+    </a>
+</div>
